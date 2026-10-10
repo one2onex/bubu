@@ -1,0 +1,12 @@
+.idea
+.vs
+.vscode
+
+cmake-build-*/
+build/
+
+/compile_commands.json
+/.cache
+/.clangd
+
+/pkgs

@@ -1,0 +1,139 @@
+{
+  "version": 3,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 21,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "default",
+      "hidden": true,
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/${presetName}",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "RelWithDebInfo"
+      }
+    },
+    {
+      "name": "linux",
+      "inherits": "default",
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Linux"
+      }
+    },
+    {
+      "name": "musl",
+      "hidden": true,
+      "inherits": "linux",
+      "toolchainFile": "/opt/buildroot/${presetName}/share/buildroot/toolchainfile.cmake",
+      "cacheVariables": {
+        "MUSL": true,
+        "CMAKE_EXE_LINKER_FLAGS": "-static"
+      }
+    },
+    {
+      "name": "musl-x86_64",
+      "inherits": "musl"
+    },
+    {
+      "name": "musl-aarch64",
+      "inherits": "musl"
+    },
+    {
+      "name": "musl-armv7l",
+      "inherits": "musl"
+    },
+    {
+      "name": "android",
+      "hidden": true,
+      "inherits": "default",
+      "cacheVariables": {
+        "CMAKE_SYSTEM_NAME": "Android",
+        "CMAKE_SYSTEM_VERSION": "23",
+        "CMAKE_ANDROID_NDK": "$env{ANDROID_NDK_HOME}",
+        "CMAKE_ANDROID_STL_TYPE": "c++_static",
+        "CMAKE_ANDROID_NDK_TOOLCHAIN_VERSION": "clang"
+      },
+      "condition": {
+        "type": "notEquals",
+        "lhs": "$env{ANDROID_NDK_HOME}",
+        "rhs": ""
+      }
+    },
+    {
+      "name": "android-arm64-v8a",
+      "inherits": "android",
+      "cacheVariables": {
+        "CMAKE_ANDROID_ARCH_ABI": "arm64-v8a"
+      }
+    },
+    {
+      "name": "android-armeabi-v7a",
+      "inherits": "android",
+      "cacheVariables": {
+        "CMAKE_ANDROID_ARCH_ABI": "armeabi-v7a"
+      }
+    },
+    {
+      "name": "apple",
+      "hidden": true,
+      "inherits": "default",
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Darwin"
+      }
+    },
+    {
+      "name": "macosx-x86_64",
+      "inherits": "apple",
+      "cacheVariables": {
+        "CMAKE_OSX_ARCHITECTURES": "x86_64"
+      }
+    },
+    {
+      "name": "macosx-arm64",
+      "inherits": "apple",
+      "cacheVariables": {
+        "CMAKE_OSX_ARCHITECTURES": "arm64"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "linux",
+      "configurePreset": "linux"
+    },
+    {
+      "name": "musl-x86_64",
+      "configurePreset": "musl-x86_64"
+    },
+    {
+      "name": "musl-aarch64",
+      "configurePreset": "musl-aarch64"
+    },
+    {
+      "name": "musl-armv7l",
+      "configurePreset": "musl-armv7l"
+    },
+    {
+      "name": "android-arm64-v8a",
+      "configurePreset": "android-arm64-v8a"
+    },
+    {
+      "name": "android-armeabi-v7a",
+      "configurePreset": "android-armeabi-v7a"
+    },
+    {
+      "name": "macosx-x86_64",
+      "configurePreset": "macosx-x86_64"
+    },
+    {
+      "name": "macosx-arm64",
+      "configurePreset": "macosx-arm64"
+    }
+  ]
+}
